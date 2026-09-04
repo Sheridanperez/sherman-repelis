@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sherman | Streaming Exclusivo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <img src="imagenes/fondo.PNG" alt="Sherman Logo" class="logo-navbar">
+                <span class="brand-title">SHERMAN</span>
+            </div>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir Menú">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="#" class="active">Inicio</a>
+                <a href="#">Películas</a>
+                <a href="#">Mi Lista</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BANNER PRINCIPAL (HERO) -->
+    <section class="hero-banner hero-evildead">
+        <div class="hero-overlay-gradient"></div>
+        <div class="hero-content">
+            <div class="hero-badges-wrapper">
+                <span class="hero-badge-netflix">ESTRENO 2026</span>
+                <span class="hero-badge-quality">4K ULTRA HD</span>
+            </div>
+            <h1>Evil Dead: En Llamas</h1>
+            <p>Tras la pérdida de su esposo, una familia se reúne en una casa apartada que se convierte en un infierno total cuando los deadites comienzan a poseerlos uno a uno en una lucha desesperada por sobrevivir.</p>
+            <div class="hero-actions">
+                <button class="btn-hero-play" onclick="verPelicula('https://drive.google.com/file/d/1yeaSJKUAxvKcyKKB2P3cKCvZpzRsWuMS/preview')">
+                    <i class="fa-solid fa-play"></i> Reproducir
+                </button>
+                <a href="#" class="btn-hero-info">
+                    <i class="fa-solid fa-circle-info"></i> Más información
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-container">
+        <section class="category-section">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-fire text-red"></i> Tendencias de Hoy</h2>
+                <span class="see-more">Ver todo <i class="fa-solid fa-chevron-right"></i></span>
+            </div>
+            
+            <div class="grid-peliculas">
+                <!-- Película 1: Evil Dead -->
+                <div class="card">
+                    <div class="card-image-box">
+                        <img src="imagenes/EvilDeadenllamas.PNG" alt="Evil Dead En Llamas">
+                        <div class="card-top-badges">
+                            <span class="badge-tag red">NUEVO</span>
+                            <span class="badge-tag dark">4K</span>
+                        </div>
+                        <div class="card-overlay">
+                            <button class="btn-card-play" onclick="verPelicula('https://drive.google.com/file/d/1yeaSJKUAxvKcyKKB2P3cKCvZpzRsWuMS/preview')">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Evil Dead: En Llamas</h3>
+                        <div class="card-meta">
+                            <span class="match-score">98% para ti</span>
+                            <span>2026</span>
+                            <span class="dot">•</span>
+                            <span>Terror / Gore</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Película 2: Spider-Man -->
+                <!-- Película 2: Spider-Man -->
+                <div class="card">
+                    <div class="card-image-box">
+                        <img src="imagenes/Spiderman.PNG" alt="Spider-Man">
+                        <div class="card-top-badges">
+                            <span class="badge-tag blue">ESTRENO</span>
+                            <span class="badge-tag dark">HD</span>
+                        </div>
+                        <div class="card-overlay">
+                            <button class="btn-card-play" onclick="verPelicula('https://drive.google.com/uc?export=download&id=19Slf074HepOsG48pBMDx3aX2n3G-w_vt')">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Spider-Man: Brand New Day</h3>
+                        <div class="card-meta">
+                            <span class="match-score">95% para ti</span>
+                            <span>2026</span>
+                            <span class="dot">•</span>
+                            <span>Acción</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Película 3: La Noche del Demonio -->
+                <div class="card">
+                    <div class="card-image-box">
+                        <img src="imagenes/Lanochedeldemonio.PNG" alt="La Noche del Demonio">
+                        <div class="card-top-badges">
+                            <span class="badge-tag dark">HD</span>
+                        </div>
+                        <div class="card-overlay">
+                            <button class="btn-card-play" onclick="verPelicula('https://drive.google.com/file/d/1m7o8XR8hEpl4vy3pg01y0ngBekkIj7K9/preview')">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>La Noche del Demonio</h3>
+                        <div class="card-meta">
+                            <span class="match-score">91% para ti</span>
+                            <span>2026</span>
+                            <span class="dot">•</span>
+                            <span>Terror</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Película 4: Coyote vs Acme -->
+                <div class="card">
+                    <div class="card-image-box">
+                        <img src="imagenes/CoyoteVSAcme.PNG" alt="Coyote vs Acme">
+                        <div class="card-top-badges">
+                            <span class="badge-tag blue">ESTRENO</span>
+                            <span class="badge-tag dark">HD</span>
+                        </div>
+                        <div class="card-overlay">
+                            <button class="btn-card-play" onclick="verPelicula('https://drive.google.com/file/d/1N6YYujkVsorS2bzelC89nxV_bB4lmfwi/preview')">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <h3>Coyote vs. Acme</h3>
+                        <div class="card-meta">
+                            <span class="match-score">94% para ti</span>
+                            <span>2026</span>
+                            <span class="dot">•</span>
+                            <span>Comedia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Sherman Streaming. Plataforma de uso exclusivo sin ánimo de lucro.</p>
+            <div class="footer-links">
+                <a href="#">Términos de uso</a>
+                <a href="#">Privacidad</a>
+                <a href="#">Centro de ayuda</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT PARA ABRIR EL ENLACE DE DRIVE -->
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        function verPelicula(enlaceDrive) {
+            if(enlaceDrive !== '#') {
+                window.open(enlaceDrive, '_blank');
+            } else {
+                alert('Próximamente enlace disponible.');
+            }
+        }
+    </script>
+
+</body>
+</html>
