@@ -7,7 +7,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-NQLBXV54HZ');
     </script>
 
@@ -19,190 +18,469 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4% !important;
+            height: 70px;
+            background: #141414;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+        .nav-container-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 6px 12px;
+            margin: 0 20px;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            width: 220px;
+        }
+        .search-box input::placeholder {
+            color: #aaa;
+        }
+        .search-box button {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .search-box button:hover {
+            color: #fff;
+        }
+
+        /* MODAL DE REPRODUCCIÓN */
+        .modal-player-bg {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-player-container {
+            position: relative;
+            width: 92%;
+            max-width: 1100px;
+            height: 88vh;
+            background: #0d0d0d;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(229, 9, 20, 0.5);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #222;
+        }
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #161616;
+            border-bottom: 1px solid #282828;
+            z-index: 5;
+        }
+        .server-selector {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .server-notice {
+            color: #e50914;
+            font-size: 11px;
+            font-weight: 600;
+            margin: 0 0 6px 0;
+            width: 100%;
+        }
+        .server-btn {
+            background: #222;
+            color: #ccc;
+            border: 1px solid #333;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .server-btn:hover {
+            background: #333;
+            color: #fff;
+        }
+        .server-btn.active {
+            background: #e50914;
+            color: #fff;
+            border-color: #e50914;
+        }
+        .close-player-btn {
+            color: #aaa;
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 5px;
+            transition: color 0.2s;
+        }
+        .close-player-btn:hover {
+            color: #fff;
+        }
+        .player-video-wrapper {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body {
+            margin: 0;
+            padding-top: 70px;
+            background-color: #141414;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
 
     <!-- BARRA DE NAVEGACIÓN -->
     <header class="navbar">
-        <div class="nav-container">
+        <div class="nav-container-flex">
             <div class="nav-left">
-                <img src="imagenes/fondo.PNG" alt="Sherman Logo" class="logo-navbar">
-                <span class="brand-title">SHERMAN</span>
+                <img src="imagenes/fondo.PNG" alt="Sherman Logo" class="logo-navbar" style="height: 35px;">
+                <span class="brand-title" style="font-weight: 800; color: #e50914; font-size: 20px; letter-spacing: 1px;">SHERMAN</span>
             </div>
-            
-            <button class="menu-toggle" id="menuToggle" aria-label="Abrir Menú">
-                <i class="fa-solid fa-bars"></i>
-            </button>
 
-            <nav class="nav-links" id="navLinks">
-                <a href="#" class="active">Inicio</a>
-                <a href="#">Películas</a>
-                <a href="#">Mi Lista</a>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar películas...">
+                <button onclick="buscarPeliculas()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <nav class="nav-links" id="navLinks" style="display: flex; gap: 20px; align-items: center;">
+                <a href="#" onclick="cargarPeliculas(); return false;" style="color: #fff; text-decoration: none; font-weight: 600;">Inicio</a>
+                <a href="#" style="color: #b3b3b3; text-decoration: none;">Películas</a>
+                <a href="#" style="color: #b3b3b3; text-decoration: none;">Mi Lista</a>
             </nav>
         </div>
     </header>
 
-    <!-- BANNER PRINCIPAL (HERO) -->
-    <section class="hero-banner hero-evildead">
+    <!-- BANNER PRINCIPAL -->
+    <section class="hero-banner hero-evildead" style="position: relative; height: 75vh; display: flex; align-items: center; padding: 0 4%;">
         <div class="hero-overlay-gradient"></div>
-        <div class="hero-content">
-            <div class="hero-badges-wrapper">
-                <span class="hero-badge-netflix">ESTRENO 2026</span>
-                <span class="hero-badge-quality">4K ULTRA HD</span>
+        <div class="hero-content" style="z-index: 2; max-width: 600px;">
+            <div class="hero-badges-wrapper" style="margin-bottom: 10px;">
+                <span class="hero-badge-netflix" style="background: #e50914; padding: 3px 8px; font-size: 11px; font-weight: 700; border-radius: 4px;">AUDIO LATINO / ESPAÑOL</span>
+                <span class="hero-badge-quality" style="border: 1px solid #fff; padding: 2px 6px; font-size: 11px; border-radius: 4px; margin-left: 5px;">HD</span>
             </div>
-            <h1>Evil Dead: En Llamas</h1>
-            <p>Tras la pérdida de su esposo, una familia se reúne en una casa apartada que se convierte en un infierno total cuando los deadites comienzan a poseerlos uno a uno en una lucha desesperada por sobrevivir.</p>
-            <div class="hero-actions">
-                <button class="btn-hero-play" onclick="verPelicula('https://drive.google.com/file/d/1yeaSJKUAxvKcyKKB2P3cKCvZpzRsWuMS/preview')">
+            <h1 style="font-size: 42px; margin: 0 0 15px 0; font-weight: 800;">Cargando...</h1>
+            <p style="font-size: 15px; color: #ddd; line-height: 1.5; margin-bottom: 20px;">Obteniendo información del catálogo...</p>
+            <div class="hero-actions" style="display: flex; gap: 15px;">
+                <button class="btn-hero-play" style="background: #fff; color: #000; border: none; padding: 10px 25px; font-weight: 700; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                     <i class="fa-solid fa-play"></i> Reproducir
                 </button>
-                <a href="#" class="btn-hero-info">
-                    <i class="fa-solid fa-circle-info"></i> Más información
-                </a>
             </div>
         </div>
     </section>
 
     <!-- CONTENIDO PRINCIPAL -->
-    <main class="main-container">
+    <main class="main-container" style="padding: 30px 4%;">
         <section class="category-section">
-            <div class="section-header">
-                <h2><i class="fa-solid fa-fire text-red"></i> Tendencias de Hoy</h2>
-                <span class="see-more">Ver todo <i class="fa-solid fa-chevron-right"></i></span>
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="sectionTitle" style="font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-fire" style="color: #e50914;"></i> Catálogo en Español Latino
+                </h2>
             </div>
-            
-            <div class="grid-peliculas">
-                <!-- Película 1: Evil Dead -->
-                <div class="card">
-                    <div class="card-image-box">
-                        <img src="imagenes/EvilDeadenllamas.PNG" alt="Evil Dead En Llamas">
-                        <div class="card-top-badges">
-                            <span class="badge-tag red">NUEVO</span>
-                            <span class="badge-tag dark">4K</span>
-                        </div>
-                        <div class="card-overlay">
-                            <button class="btn-card-play" onclick="verPelicula('https://drive.google.com/file/d/1yeaSJKUAxvKcyKKB2P3cKCvZpzRsWuMS/preview')">
-                                <i class="fa-solid fa-play"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <h3>Evil Dead: En Llamas</h3>
-                        <div class="card-meta">
-                            <span class="match-score">98% para ti</span>
-                            <span>2026</span>
-                            <span class="dot">•</span>
-                            <span>Terror / Gore</span>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Película 2: Spider-Man -->
-                <div class="card">
-                    <div class="card-image-box">
-                        <img src="imagenes/Spiderman.PNG" alt="Spider-Man">
-                        <div class="card-top-badges">
-                            <span class="badge-tag blue">ESTRENO</span>
-                            <span class="badge-tag dark">HD</span>
-                        </div>
-                        <div class="card-overlay">
-                            <button class="btn-card-play" onclick="verPelicula('https://drive.google.com/file/d/19Slf074HepOsG48pBMDx3aX2n3G-w_vt/preview')">
-                                <i class="fa-solid fa-play"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <h3>Spider-Man: Brand New Day</h3>
-                        <div class="card-meta">
-                            <span class="match-score">95% para ti</span>
-                            <span>2026</span>
-                            <span class="dot">•</span>
-                            <span>Acción</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Película 3: La Noche del Demonio -->
-                <div class="card">
-                    <div class="card-image-box">
-                        <img src="imagenes/Lanochedeldemonio.PNG" alt="La Noche del Demonio">
-                        <div class="card-top-badges">
-                            <span class="badge-tag dark">HD</span>
-                        </div>
-                        <div class="card-overlay">
-                            <button class="btn-card-play" onclick="verPelicula('https://drive.google.com/file/d/1m7o8XR8hEpl4vy3pg01y0ngBekkIj7K9/preview')">
-                                <i class="fa-solid fa-play"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <h3>La Noche del Demonio</h3>
-                        <div class="card-meta">
-                            <span class="match-score">91% para ti</span>
-                            <span>2026</span>
-                            <span class="dot">•</span>
-                            <span>Terror</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Película 4: Coyote vs Acme -->
-                <div class="card">
-                    <div class="card-image-box">
-                        <img src="imagenes/CoyoteVSAcme.PNG" alt="Coyote vs Acme">
-                        <div class="card-top-badges">
-                            <span class="badge-tag blue">ESTRENO</span>
-                            <span class="badge-tag dark">HD</span>
-                        </div>
-                        <div class="card-overlay">
-                            <button class="btn-card-play" onclick="verPelicula('https://drive.google.com/file/d/1N6YYujkVsorS2bzelC89nxV_bB4lmfwi/preview')">
-                                <i class="fa-solid fa-play"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-info">
-                        <h3>Coyote vs. Acme</h3>
-                        <div class="card-meta">
-                            <span class="match-score">94% para ti</span>
-                            <span>2026</span>
-                            <span class="dot">•</span>
-                            <span>Comedia</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="grid-peliculas" id="gridPeliculas" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px;">
+                <p style="color: #fff;">Cargando catálogo...</p>
             </div>
         </section>
     </main>
 
-    <!-- PIE DE PÁGINA -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2026 Sherman Streaming. Plataforma de uso exclusivo sin ánimo de lucro.</p>
-            <div class="footer-links">
-                <a href="#">Términos de uso</a>
-                <a href="#">Privacidad</a>
-                <a href="#">Centro de ayuda</a>
-            </div>
-        </div>
+    <footer class="footer" style="padding: 40px 4%; text-align: center; border-top: 1px solid #222; margin-top: 50px; color: #777; font-size: 13px;">
+        <p>&copy; 2026 Streaming Exclusivo. Plataforma sin ánimo de lucro.</p>
     </footer>
 
-    <!-- SCRIPT PARA ABRIR EL ENLACE DE DRIVE -->
-    <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
+    <!-- MODAL DE REPRODUCCIÓN -->
+    <div id="videoModal" class="modal-player-bg">
+        <div class="modal-player-container">
+            <div class="player-header">
+                <div class="server-selector">
+                    <p class="server-notice">
+                        <i class="fa-solid fa-circle-info"></i> Reproductor de vídeo directo (sin anuncios de páginas web).
+                    </p>
+                    <span style="color:#aaa; font-size:12px; font-weight:600; margin-right: 5px;">
+                        <i class="fa-solid fa-server"></i> Servidor:
+                    </span>
+                    <button class="server-btn active" onclick="cambiarServidor(1)">Player Scraper 1</button>
+                    <button class="server-btn" onclick="cambiarServidor(2)">Player Scraper 2</button>
+                    <button class="server-btn" onclick="cambiarServidor(3)">VidSrc Directo</button>
+                    <button class="server-btn" onclick="cambiarServidor(4)">MultiEmbed Video</button>
+                </div>
+                <button onclick="cerrarReproductor()" class="close-player-btn" aria-label="Cerrar reproductor">&times;</button>
+            </div>
+            <div class="player-video-wrapper">
+                <iframe id="iframePlayer" src="" style="width:100%; height:100%; border:none;" allowfullscreen allow="autoplay; encrypted-media; fullscreen" referrerpolicy="no-referrer"></iframe>
+            </div>
+        </div>
+    </div>
 
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+    <script>
+        const API_KEY = 'f880a8e5f85c8de5ed4b5724b7b2d916';
+        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+        const HERO_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
+
+        let idPeliculaActual = null;
+
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                buscarPeliculas();
+            }
         });
 
-        function verPelicula(enlaceDrive) {
-            if(enlaceDrive !== '#') {
-                window.open(enlaceDrive, '_blank');
-            } else {
-                alert('Próximamente enlace disponible.');
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && document.getElementById('videoModal').style.display === 'flex') {
+                cerrarReproductor();
+            }
+        });
+
+        async function cargarPeliculas() {
+            document.getElementById('sectionTitle').innerHTML = '<i class="fa-solid fa-fire" style="color: #e50914;"></i> Catálogo en Español Latino';
+
+            try {
+                let todasLasPeliculas = [];
+                let promesas = [];
+
+                for (let pagina = 1; pagina <= 5; pagina++) {
+                    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-MX&sort_by=popularity.desc&page=${pagina}`;
+                    promesas.push(fetch(url).then(res => res.json()));
+                }
+
+                const resultadosPaginas = await Promise.all(promesas);
+
+                resultadosPaginas.forEach(data => {
+                    if (data.results) {
+                        todasLasPeliculas = todasLasPeliculas.concat(data.results);
+                    }
+                });
+
+                const peliculasValidas = todasLasPeliculas.filter(p => p.poster_path !== null && p.poster_path !== undefined);
+
+                if (peliculasValidas.length > 0) {
+                    configurarHero(peliculasValidas[0]);
+                    renderizarGrid(peliculasValidas);
+                }
+            } catch (error) {
+                console.error('Error al cargar:', error);
+                document.getElementById('gridPeliculas').innerHTML = '<p style="color:#fff;">Error al obtener el catálogo.</p>';
             }
         }
-    </script>
 
+        async function buscarPeliculas() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                cargarPeliculas();
+                return;
+            }
+
+            document.getElementById('sectionTitle').innerHTML = `<i class="fa-solid fa-magnifying-glass" style="color: #e50914;"></i> Resultados para: "${query}"`;
+            const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=es-MX&query=${encodeURIComponent(query)}&page=1`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.results) {
+                    const peliculasValidas = data.results.filter(p => p.poster_path !== null);
+
+                    if (peliculasValidas.length > 0) {
+                        configurarHero(peliculasValidas[0]);
+                        renderizarGrid(peliculasValidas);
+                    } else {
+                        document.getElementById('gridPeliculas').innerHTML = '<p style="color:#fff; padding: 20px;">No se encontraron películas con póster disponible.</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error en la búsqueda:', error);
+            }
+        }
+
+        function configurarHero(pelicula) {
+            const heroSection = document.querySelector('.hero-banner');
+            const backdropPath = pelicula.backdrop_path ? HERO_IMAGE_BASE_URL + pelicula.backdrop_path : '';
+
+            if (backdropPath) {
+                heroSection.style.backgroundImage = `linear-gradient(to top, #141414 10%, rgba(20,20,20,0.4) 50%), url('${backdropPath}')`;
+                heroSection.style.backgroundSize = 'cover';
+                heroSection.style.backgroundPosition = 'center';
+            }
+
+            document.querySelector('.hero-content h1').textContent = pelicula.title;
+            document.querySelector('.hero-content p').textContent = pelicula.overview || 'Sin descripción disponible en español.';
+            document.querySelector('.btn-hero-play').onclick = () => verPelicula(pelicula.id);
+        }
+
+        function renderizarGrid(peliculas) {
+            const grid = document.getElementById('gridPeliculas');
+            grid.innerHTML = '';
+
+            peliculas.forEach((pelicula) => {
+                const posterPath = IMAGE_BASE_URL + pelicula.poster_path;
+                const anio = pelicula.release_date ? pelicula.release_date.split('-')[0] : 'N/A';
+                const score = Math.round(pelicula.vote_average * 10);
+
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.cssText = "background: #181818; border-radius: 8px; overflow: hidden; transition: transform 0.3s; cursor: pointer;";
+
+                const imageBox = document.createElement('div');
+                imageBox.style.cssText = "position: relative; width: 100%; aspect-ratio: 2/3; overflow: hidden;";
+
+                const img = document.createElement('img');
+                img.src = posterPath;
+                img.alt = pelicula.title;
+                img.loading = 'lazy';
+                img.style.cssText = "width: 100%; height: 100%; object-fit: cover;";
+                imageBox.appendChild(img);
+
+                const overlay = document.createElement('div');
+                overlay.className = 'card-overlay';
+                overlay.style.cssText = "position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s;";
+
+                const playBtn = document.createElement('button');
+                playBtn.className = 'btn-card-play';
+                playBtn.setAttribute('aria-label', 'Reproducir ' + pelicula.title);
+                playBtn.style.cssText = "background: #e50914; color: #fff; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 16px; cursor: pointer;";
+                playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                overlay.appendChild(playBtn);
+                imageBox.appendChild(overlay);
+
+                const infoBox = document.createElement('div');
+                infoBox.style.cssText = "padding: 12px;";
+
+                const titulo = document.createElement('h3');
+                titulo.textContent = pelicula.title;
+                titulo.title = pelicula.title;
+                titulo.style.cssText = "font-size: 14px; margin: 0 0 6px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;";
+
+                const meta = document.createElement('div');
+                meta.style.cssText = "display: flex; justify-content: space-between; font-size: 12px; color: #aaa;";
+
+                const scoreSpan = document.createElement('span');
+                scoreSpan.textContent = score > 0 ? score + '%' : 'N/A';
+                scoreSpan.style.cssText = "color: #46d369; font-weight: 600;";
+
+                const anioSpan = document.createElement('span');
+                anioSpan.textContent = anio;
+
+                const aviso = document.createElement('p');
+                aviso.textContent = 'Audio Latino / Sub';
+                aviso.style.cssText = "font-size:10px; color:#888; margin:6px 0 0 0;";
+
+                meta.appendChild(scoreSpan);
+                meta.appendChild(anioSpan);
+                infoBox.appendChild(titulo);
+                infoBox.appendChild(meta);
+                infoBox.appendChild(aviso);
+
+                card.appendChild(imageBox);
+                card.appendChild(infoBox);
+
+                card.onclick = () => verPelicula(pelicula.id);
+                card.onmouseenter = () => { card.style.transform = 'scale(1.03)'; overlay.style.opacity = '1'; };
+                card.onmouseleave = () => { card.style.transform = 'scale(1)'; overlay.style.opacity = '0'; };
+
+                grid.appendChild(card);
+            });
+        }
+
+        function verPelicula(idTmdb) {
+            idPeliculaActual = idTmdb;
+            document.getElementById('videoModal').style.display = 'flex';
+            cambiarServidor(1);
+        }
+
+        function cambiarServidor(numeroServidor) {
+            const iframe = document.getElementById('iframePlayer');
+            const botones = document.querySelectorAll('.server-btn');
+
+            botones.forEach((btn, idx) => {
+                if (idx + 1 === numeroServidor) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            switch (numeroServidor) {
+                case 1:
+                    // Reproductor basado en infraestructura tipo Embed69 (extrae el vídeo directo de plataformas latinas)
+                    iframe.src = `https://unlimplay.com/play/embed/movie/${idPeliculaActual}`;
+                    break;
+                case 2:
+                    // Servidor alternativo de streaming directo
+                    iframe.src = `https://embed69.com/v/movie/${idPeliculaActual}`;
+                    break;
+                case 3:
+                    // VidSrc reproductor nativo de video en pantalla
+                    iframe.src = `https://vidsrc.xyz/embed/movie/${idPeliculaActual}?ds_lang=es`;
+                    break;
+                case 4:
+                    // MultiEmbed reproductor directo
+                    iframe.src = `https://multiembed.mov/?video_id=${idPeliculaActual}&tmdb=1`;
+                    break;
+                default:
+                    iframe.src = '';
+            }
+        }
+
+        function cerrarReproductor() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('iframePlayer');
+            iframe.src = '';
+            modal.style.display = 'none';
+            idPeliculaActual = null;
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarPeliculas);
+    </script>
 </body>
 </html>
